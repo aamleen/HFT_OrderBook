@@ -1,11 +1,11 @@
 from rest_framework import serializers
-from .models import Order, Trade
+from .models import Order, Trade, Token
 from django.contrib.auth.models import User
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['id', 'username', 'email']
+        fields = ['username', 'password']
         extra_kwargs = {
             'password': {'write_only': True},
         }
@@ -13,15 +13,15 @@ class UserSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         user = User.objects.create_user(
             username=validated_data['username'],
-            email=validated_data['email'],
             password=validated_data['password'],
         )
         return user
 
 class OrderSerializer(serializers.ModelSerializer):
+    user = UserSerializer(read_only=True, many=False)
     class Meta:
         model = Order
-        fields = ['id', 'user', 'price', 'quantity', 'order_type', 'timestamp']
+        fields = ['id', 'user', 'price', 'quantity', 'order_type', 'timestamp', 'token']
         extra_kwargs = {
             'user': {'read_only': True},
         }
@@ -29,8 +29,13 @@ class OrderSerializer(serializers.ModelSerializer):
 class TradeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Trade
-        fields = ['id', 'bid_user', 'ask_user', 'price', 'quantity', 'timestamp']
+        fields = ['id', 'bid_user', 'ask_user', 'price', 'quantity', 'timestamp', 'token']
         extra_kwargs = {
             'bid_user': {'read_only': True},
             'ask_user': {'read_only': True},
         }
+
+class TokenSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Token
+        fields = ['name', 'symbol']
