@@ -9,7 +9,7 @@ function OrderBook() {
 
   useEffect(() => {
     // Fetch Bid data from the Django API
-    api.get('/trading/order-book/REL/')
+    api.get('/orderbook/order-book/REL/')
       .then(response => {
         setBidOrders(response.data['bids']);
         setAskOrders(response.data['asks']);

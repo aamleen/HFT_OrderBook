@@ -8,7 +8,7 @@ function TradeHistory() {
 
   useEffect(() => {
     // Fetch user's trade history
-    api.get("/trading/trade-history/").then((res) => setTradeHistory(res.data)); // Replace `1` with dynamic user/token ID
+    api.get("/orderbook/trade-history/").then((res) => setTradeHistory(res.data)); // Replace `1` with dynamic user/token ID
   }, []);
 
   return (

@@ -14,7 +14,7 @@ function OrderPlacement() {
     print(timestamp);
     const payload = { order_type, price, quantity, token , timestamp: timestamp}; 
     try {
-      const res = await api.post("/trading/place-order/", payload);
+      const res = await api.post("/orderbook/place-order/", payload);
     } catch (err) {
       console.error(err);
     }

@@ -7,6 +7,8 @@ import OrderTable from "../components/OrderTable";
 function Dashboard() {
   const [tokens, setTokens] = useState([]);
   const [selectedToken, setSelectedToken] = useState("REL");
+  const [tradeHistory, setTradeHistory] = useState([]);
+  const [executedTrades, setExecutedTrades] = useState([]);
 
   useEffect(() => {
     // Fetch tokens
@@ -50,6 +52,8 @@ function Dashboard() {
     const payload = { order_type, price, quantity, token: selectedToken , timestamp: timestamp}; // Replace `1` with dynamic token ID
     try {
       const res = await api.post("/orderbook/place-order/", payload);
+      console.log(res.data);
+      setExecutedTrades([...executedTrades, ...res.data]);  
     } catch (err) {
       console.error(err);
     }
@@ -159,6 +163,42 @@ function Dashboard() {
             </form>
           </div>
         </div>
+        {/* EXECUTED-ORDERS row, below orderbook and buy/sell */}
+        <div className="row mt-5 gx-5">
+          <div className="col-md-11 card mx-3 pt-3">
+          <table className="table table-striped">
+            <thead>
+              <tr>
+                <th>Token</th>
+                <th>Price</th>
+                <th>Quantity</th>
+                <th>Timestamp</th>
+                <th>Bid User</th>
+                <th>Ask User</th>
+              </tr>
+            </thead>
+            <tbody>
+              {executedTrades.length > 0 ? (
+                  executedTrades.map((order, index) => (
+                      <tr key={index}>
+                      <td>{order.token}</td>
+                      <td>{order.price}</td>
+                      <td>{order.quantity}</td>
+                      <td>{order.timestamp}</td>
+                      <td>{order.bid_user}</td>
+                      <td>{order.ask_user}</td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan="3">No orders available</td>
+                  </tr>
+                )}
+            </tbody>
+          </table>
+        </div>
+    
+      </div>
     </div>
     </>
   );
