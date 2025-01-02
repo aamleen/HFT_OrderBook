@@ -15,13 +15,13 @@ function NavigationBar() {
               <a className="nav-link active" aria-current="page" href="/">Home</a>
             </li>
             <li className="nav-item">
-              <a className="nav-link" href="/order-book">Order Book</a>
+              <a className="nav-link" href="/orderBook">Order Book</a>
             </li>
             <li className="nav-item">
-              <a className="nav-link" href="/trade-history">Trade History</a>
+              <a className="nav-link" href="/tradeHistory">Trade History</a>
             </li>
             <li className="nav-item">
-              <a className="nav-link" href="/order-placement">Buy/Sell</a>
+              <a className="nav-link" href="/orderPlacement">Buy/Sell</a>
             </li>
           </ul>
         </div>
