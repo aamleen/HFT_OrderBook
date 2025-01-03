@@ -1,0 +1,55 @@
+/* app.css */
+
+/* Set dark background color for the entire page */
+body {
+    background-color: #121212; /* Dark background */
+    color: black; /* Light text color */
+    font-family: Arial, sans-serif; /* Optional: Set font family */
+    margin: 0; /* Remove default margin */
+    padding: 0; /* Remove default padding */
+  }
+  
+  /* Styling for the main app container */
+  #root {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+  }
+  
+  /* Links can have a light color, but should still be visible */
+  a {
+    color: #4CAF50; /* Green color for links */
+    text-decoration: none;
+  }
+  
+  a:hover {
+    text-decoration: underline; /* Underline when hovering */
+  }
+  
+  /* Optional: Styling for buttons */
+  button {
+    background-color: #333; /* Dark background for buttons */
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+  }
+  
+  button:hover {
+    background-color: #555; /* Slightly lighter on hover */
+  }
+  
+  /* Optional: Adjust heading styles */
+  h1, h2, h3 {
+    color: #555; /* Light grayish color for headings */
+  }
+  
+  /* Optional: Styling for cards or other components */
+  .card {
+    background-color: #1f1f1f; /* Dark background for cards */
+    color: #e0e0e0; /* Light text */
+  }
+  

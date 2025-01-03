@@ -27,6 +27,10 @@ class OrderSerializer(serializers.ModelSerializer):
         }
 
 class TradeSerializer(serializers.ModelSerializer):
+    bid_user = serializers.CharField(
+        source="bid_user.username", read_only=True)
+    ask_user = serializers.CharField(
+        source="ask_user.username", read_only=True)
     class Meta:
         model = Trade
         fields = ['id', 'bid_user', 'ask_user', 'price', 'quantity', 'timestamp', 'token']

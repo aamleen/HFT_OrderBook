@@ -15,11 +15,11 @@ function TradeHistory() {
     <>
       <NavigationBar />
       <div className="container mt-5 pt-3 pb-3">
-        <h1 className="text-center display-4">Trade History</h1>
+        <h1 className="text-center display-4">My Trade History</h1>
       </div>
 
       <div className="col card mx-3">
-      <table className="table table-striped">
+      <table className="table table-striped table-hover table-bordered">
         <thead>
           <tr>
             <th>Token</th>

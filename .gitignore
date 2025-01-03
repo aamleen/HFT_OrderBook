@@ -1,2 +1,5 @@
-Backend\nkSecurities\nkSecurities\__pycache__
+Backend/nkSecurities/nkSecurities/__pycache__
 venv/
+# ignore all __pycache__ directories
+__pycache__/
+Backend/nkSecurities/orderbook/__pycache__

@@ -9,6 +9,7 @@ function Dashboard() {
   const [selectedToken, setSelectedToken] = useState("REL");
   const [tradeHistory, setTradeHistory] = useState([]);
   const [executedTrades, setExecutedTrades] = useState([]);
+  // const [userName, setUserName] = useState("User");
 
   useEffect(() => {
     // Fetch tokens
@@ -17,19 +18,7 @@ function Dashboard() {
 
 
   const [bidOrders, setBidOrders] = useState([]);
-  const [askOrders, setAskOrders] = useState([]);
-
-  useEffect(() => {
-    // Fetch Bid data from the Django API
-    api.get(`/orderbook/order-book/${selectedToken}/`)
-      .then(response => {
-        setBidOrders(response.data['bids']);
-        setAskOrders(response.data['asks']);
-      })
-      .catch(error => {
-        console.error('Error fetching bid orders:', error);
-      });
-  }, []);
+  const [askOrders, setAskOrders] = useState([]);  
 
   const refresh = () => {
     api.get(`/orderbook/order-book/${selectedToken}/`)
@@ -41,6 +30,11 @@ function Dashboard() {
         console.error('Error fetching bid orders:', error);
       });
   };
+
+  useEffect(() => {
+    // Fetch Bid data from the Django API
+    refresh();
+  }, []);
 
   const [order_type, setType] = useState("bid");
   const [price, setPrice] = useState("");
@@ -106,12 +100,18 @@ function Dashboard() {
           </li>
         ))}
       </ul>
+      {/* Div to show the selected trade */}
+    <div className="container mt-3">
+      <h3 className="text-bg-light">{selectedToken}</h3>
     </div>
+    </div>
+
+    
 
       {/* Create two divs side-by-side, left and right. On the left, show the orderbook and on right show the option to buy/selld */}
       <div className="container-fluid mt-3 pt-3">
         <div className="row pl-5 gx-5">
-          <div className="col-md-7 card mx-3">
+          <div className="col-md-7 card shadow p-3 mb-5 bg-body rounded mx-3">
             <div className="row">            
             {/* ORDER_BOOK Frontend view */}
             <div div className="col-md-10 "> 
@@ -126,47 +126,47 @@ function Dashboard() {
             </a> */}
             <div className="row">
               {/* Use OrderTable component for Bid Orders */}
-              <OrderTable title="Bid Orders" orders={bidOrders} />
+              <OrderTable title="Bid Orders" orders={bidOrders} bg_mode={"danger"}/>
 
               {/* Use OrderTable component for Ask Orders */}
-              <OrderTable title="Ask Orders" orders={askOrders} />
+              <OrderTable title="Ask Orders" orders={askOrders} bg_mode={"success"}/>
             </div>
           </div>
 
           {/* ORDER-PLACEMENT frontend */}
-          <div className="col-md-4 card mx-3">
+          <div className="col-md-4 card shadow p-3 mb-5 mx-3  rounded bg-warning bg-gradient" >
             <h2 className="text-center pt-2 pb-3">Buy/Sell</h2>
       
             <form onSubmit={handleSubmit}>
               <div class="mb-3">
-                <label for="trade" class="form-label">Trade</label>
+                <label for="trade" class="form-label fw-bold">Trade</label>
                 <input type="text" id="trade" class="form-control" disabled="True" placeholder={selectedToken}/>
               </div>
               <div className="mb-3">
-              <label htmlFor="order_type" className="form-label">Type:</label>
+              <label htmlFor="order_type" className="form-label fw-bold">Type:</label>
                 <select className="form-control" value={order_type} onChange={(e) => setType(e.target.value)}>
                   <option value="bid">Bid</option>
                   <option value="ask">Ask</option>
                 </select>
               </div>
               <div className="mb-3">
-              <label htmlFor="price" className="form-label">Price:</label>
+              <label htmlFor="price" className="form-label fw-bold">Price:</label>
                 <input className="form-control" type="number" value={price} onChange={(e) => setPrice(e.target.value)} required />
               </div>
               <div className="mb-3">
-              <label htmlFor="quantity" className="form-label">Quantity:</label>
+              <label htmlFor="quantity" className="form-label fw-bold">Quantity:</label>
                 <input className="form-control" type="number" value={quantity} onChange={(e) => setQuantity(e.target.value)} required />
               </div>
               <div className="mb-3">
-              <button className="btn btn-primary" type="submit">Place Order</button>
+              <button className="btn btn-primary  fw-bolder" type="submit">Place Order</button>
               </div>
             </form>
           </div>
         </div>
         {/* EXECUTED-ORDERS row, below orderbook and buy/sell */}
         <div className="row mt-5 gx-5">
-          <div className="col-md-11 card mx-3 pt-3">
-          <table className="table table-striped">
+          <div className="col-md-11 card shadow p-3 mb-5 bg-body rounded mx-3">
+          <table className="table table-striped table-hover table-bordered table-info">
             <thead>
               <tr>
                 <th>Token</th>

@@ -1,14 +1,15 @@
 import { useState } from "react";
 import api from "../api";
 import { useNavigate } from "react-router-dom";
-import { ACCESS_TOKEN, REFRESH_TOKEN } from "../constants";
+import { ACCESS_TOKEN, REFRESH_TOKEN, USER_NAME } from "../constants";
 import "../styles/LoginForm.css"
 import LoadingIndicator from "./LoadingIndicator";
 
 function Form({ route, method }) {
-    const [username, setUsername] = useState("");
+    const [username, setUsernameInput] = useState("");
     const [password, setPassword] = useState("");
     const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(null);
     const navigate = useNavigate();
 
     const name = method === "login" ? "Login" : "Register";
@@ -19,28 +20,42 @@ function Form({ route, method }) {
 
         try {
             const res = await api.post(route, { username, password })
-            if (method === "login") {
-                localStorage.setItem(ACCESS_TOKEN, res.data.access);
-                localStorage.setItem(REFRESH_TOKEN, res.data.refresh);
-                navigate("/")
+                if (method === "login") {
+                    localStorage.setItem(ACCESS_TOKEN, res.data.access);
+                    localStorage.setItem(REFRESH_TOKEN, res.data.refresh);
+                    localStorage.setItem(USER_NAME, username);
+                    navigate("/")
+                } else {
+                    navigate("/login")
+                }
+        }      
+        catch (error) {
+            if (error.response && error.response.data) {
+                setError(error.response.data.error || 'Login failed. Please try again.');
             } else {
-                navigate("/login")
+                setError('An unexpected error occurred. Please try again later.');
             }
-        } catch (error) {
-            alert(error)
         } finally {
             setLoading(false)
         }
     };
 
+   
+
     return (
+        <div>
+        {error && (
+            <div className="alert alert-warning" role="alert">
+                <strong>Warning!</strong> {error}
+            </div>
+        )}
         <form onSubmit={handleSubmit} className="form-container">
             <h1>{name}</h1>
             <input
                 className="form-input"
                 type="text"
                 value={username}
-                onChange={(e) => setUsername(e.target.value)}
+                onChange={(e) => setUsernameInput(e.target.value)}
                 placeholder="Username"
             />
             <input
@@ -55,6 +70,7 @@ function Form({ route, method }) {
                 {name}
             </button>
         </form>
+        </div>
     );
 }
 

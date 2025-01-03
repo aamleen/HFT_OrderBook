@@ -1,10 +1,10 @@
 import React from 'react';
 
-const OrderTable = ({ title, orders }) => {
+const OrderTable = ({ title, orders, bg_mode }) => {
   return (
-    <div className="col card mx-3 pb-3">
+    <div className={`col card bg-${bg_mode} mx-3 pb-3`}>
       <h2>{title}</h2>
-      <table className="table table-striped">
+      <table className="table table-striped table-hover table-bordered">
         <thead>
           <tr>
             <th>Price</th>

@@ -11,7 +11,6 @@ function OrderPlacement() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const timestamp = new Date().toISOString();
-    print(timestamp);
     const payload = { order_type, price, quantity, token , timestamp: timestamp}; 
     try {
       const res = await api.post("/orderbook/place-order/", payload);
