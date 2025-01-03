@@ -7,6 +7,7 @@ import OrderBook from "./pages/OrderBook"
 import OrderPlacement from "./pages/OrderPlacement"
 import TradeHistory from "./pages/TradeHistory"
 import ProtectedRoute from "./components/ProtectedRoute"
+import NotFound from "./components/NotFound"
 import NavigationBar from "./components/NavigationBar"
 // import css
 // import "./App.css"
@@ -31,6 +32,7 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
+        {/* Home DashBoard Page */}
         <Route
           path="/"
           element={
@@ -39,6 +41,8 @@ function App() {
             </ProtectedRoute>
           }
         />
+
+        {/* Detailed OrderBook Page */}
         <Route
           path="/orderBook"
           element={
@@ -47,6 +51,8 @@ function App() {
             </ProtectedRoute>
           }
         />
+
+        {/* Page to Bid/Ask Trade */}
         <Route
           path="/orderPlacement"
           element={
@@ -55,6 +61,8 @@ function App() {
             </ProtectedRoute>
           }
         />
+
+        {/* Page to view personal Trade History */}
         <Route
           path="/tradeHistory"
           element={
@@ -72,6 +80,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/logout" element={<Logout />} />
         <Route path="/register" element={<RegisterAndLogout />} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>
   )

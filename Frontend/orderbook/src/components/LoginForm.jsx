@@ -13,12 +13,14 @@ function Form({ route, method }) {
     const navigate = useNavigate();
 
     const name = method === "login" ? "Login" : "Register";
+    const otherName = method === "login" ? "Register" : "Login";
 
     const handleSubmit = async (e) => {
         setLoading(true);
         e.preventDefault();
 
         try {
+            // if button
             const res = await api.post(route, { username, password })
                 if (method === "login") {
                     localStorage.setItem(ACCESS_TOKEN, res.data.access);
@@ -68,6 +70,9 @@ function Form({ route, method }) {
             {loading && <LoadingIndicator />}
             <button className="form-button" type="submit">
                 {name}
+            </button>
+            <button className="btn btn-secondary" type="submit" onClick={() => navigate(`/${otherName}`)}>
+                {otherName}
             </button>
         </form>
         </div>
