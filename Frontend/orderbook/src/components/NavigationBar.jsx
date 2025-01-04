@@ -2,6 +2,8 @@ import { Link } from "react-router-dom";
 import { USER_NAME } from "../constants";
 
 function NavigationBar() {
+  // This returns a generic navigation bar with links to the home page, order book, trade history, and order placement. 
+  // It also includes a dropdown button with the user's name and a logout option.
   const username = localStorage.getItem(USER_NAME);
 
   return (

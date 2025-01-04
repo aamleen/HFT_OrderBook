@@ -20,7 +20,6 @@ function Form({ route, method }) {
         e.preventDefault();
 
         try {
-            // if button
             const res = await api.post(route, { username, password })
                 if (method === "login") {
                     localStorage.setItem(ACCESS_TOKEN, res.data.access);
@@ -71,6 +70,7 @@ function Form({ route, method }) {
             <button className="form-button" type="submit">
                 {name}
             </button>
+            {/* Another button to go to Register or Login page, from the Login or Register page respectively */}
             <button className="btn btn-secondary" type="submit" onClick={() => navigate(`/${otherName}`)}>
                 {otherName}
             </button>

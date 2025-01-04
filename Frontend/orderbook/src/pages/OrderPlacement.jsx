@@ -7,6 +7,20 @@ function OrderPlacement() {
   const [price, setPrice] = useState("");
   const [quantity, setQuantity] = useState("");
   const [token, setToken] = useState("");
+  const [error, setError] = useState(null);
+
+  const handleError = (error, error_msg) => {
+    if (error.response && error.response.data) {
+      setError(error.response.data.error || error_msg);
+    } else {
+        setError('An unexpected error occurred. Please try again later.');
+    }
+    // set timeout to clear the error message
+    setTimeout(() => {
+      setError(null);
+    }, 1000
+    );
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -15,7 +29,7 @@ function OrderPlacement() {
     try {
       const res = await api.post("/orderbook/place-order/", payload);
     } catch (err) {
-      console.error(err);
+      handleError(err, 'Error placing order:');
     }
   };
 
@@ -23,6 +37,11 @@ function OrderPlacement() {
     <>
       <NavigationBar />
       <div className="container mt-5 pt-3 pb-3">
+      {error && (
+            <div className="alert alert-warning" role="alert">
+                <strong>Warning!</strong> {error}
+            </div>
+        )}
         <h1 className="text-center display-4">Order Placement</h1>
       </div>
 

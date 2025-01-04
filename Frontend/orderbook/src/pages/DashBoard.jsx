@@ -1,14 +1,15 @@
-// src/pages/Dashboard.js
 import { useEffect, useState } from "react";
 import api from "../api";
 import NavigationBar from "../components/NavigationBar";
 import OrderTable from "../components/OrderTable";
 
 function Dashboard() {
+  // This component displays the dashboard with the order book, buy/sell form, and executed trades.
   const [tokens, setTokens] = useState([]);
   const [selectedToken, setSelectedToken] = useState("REL");
   const [tradeHistory, setTradeHistory] = useState([]);
   const [executedTrades, setExecutedTrades] = useState([]);
+  const [error, setError] = useState(null);
   // const [userName, setUserName] = useState("User");
 
   useEffect(() => {
@@ -27,7 +28,7 @@ function Dashboard() {
         setAskOrders(response.data['asks']);
       })
       .catch(error => {
-        console.error('Error fetching bid orders:', error);
+        handleError(error, 'Error fetching bid orders:');
       });
   };
 
@@ -40,46 +41,62 @@ function Dashboard() {
   const [price, setPrice] = useState("");
   const [quantity, setQuantity] = useState("");
 
+  // Function to handle errors and show error warnings on the frontend
+  const handleError = (error, error_msg) => {
+    if (error.response && error.response.data) {
+      setError(error.response.data.error || error_msg);
+    } else {
+        setError('An unexpected error occurred. Please try again later.');
+    }
+    // set timeout to clear the error message
+    setTimeout(() => {
+      setError(null);
+    }, 1000
+    );
+  };
+
+  // Function to handle form submission for placing orders
   const handleSubmit = async (e) => {
     e.preventDefault();
     const timestamp = new Date().toISOString();
     const payload = { order_type, price, quantity, token: selectedToken , timestamp: timestamp}; // Replace `1` with dynamic token ID
     try {
+      console.log("Line one");
       const res = await api.post("/orderbook/place-order/", payload);
-      console.log(res.data);
+      console.log("Line two");
       setExecutedTrades([...executedTrades, ...res.data]);  
-    } catch (err) {
-      console.error(err);
+    } catch (error) {      
+      handleError(error, 'Order placement failed. Please try again.');
     }
     // Refresh the order book for the selected token
-    api.get(`/orderbook/order-book/${selectedToken}/`)
-      .then(response => {
-        setBidOrders(response.data['bids']);
-        setAskOrders(response.data['asks']);
-      })
-      .catch(error => {
-        console.error('Error fetching bid orders:', error);
-      });
+    refresh(); 
 
   };  
 
-  // Function to handle dropdown item click
+  // Function to handle dropdown item click to get the selected token
   const handleDropDownClick = (item) => {
     setSelectedToken(item);
+    // Not calling the refresh function selectedToken might cause the order book to not update
     api.get(`/orderbook/order-book/${item}/`)
       .then(response => {
         setBidOrders(response.data['bids']);
         setAskOrders(response.data['asks']);
       })
       .catch(error => {
-        console.error('Error fetching bid orders:', error);
+        handleError(error, 'Error fetching bid orders:');
       });    
   };
+
 
   return (
     <>
       <NavigationBar />
       <div className="container mt-5 pt-3">
+      {error && (
+            <div className="alert alert-warning" role="alert">
+                <strong>Warning!</strong> {error}
+            </div>
+        )}
         <h1 className="text-center display-4">DashBoard</h1>
       </div>
       <div className="btn-group px-5">
@@ -104,10 +121,7 @@ function Dashboard() {
     <div className="container mt-3">
       <h3 className="text-bg-light">{selectedToken}</h3>
     </div>
-    </div>
-
-    
-
+      </div>   
       {/* Create two divs side-by-side, left and right. On the left, show the orderbook and on right show the option to buy/selld */}
       <div className="container-fluid mt-3 pt-3">
         <div className="row pl-5 gx-5">
@@ -132,6 +146,8 @@ function Dashboard() {
               <OrderTable title="Ask Orders" orders={askOrders} bg_mode={"success"}/>
             </div>
           </div>
+
+          
 
           {/* ORDER-PLACEMENT frontend */}
           <div className="col-md-4 card shadow p-3 mb-5 mx-3  rounded bg-warning bg-gradient" >

@@ -3,3 +3,4 @@ venv/
 # ignore all __pycache__ directories
 __pycache__/
 Backend/nkSecurities/orderbook/__pycache__
+temp.jsx

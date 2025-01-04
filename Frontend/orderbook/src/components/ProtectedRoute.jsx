@@ -6,6 +6,11 @@ import { useState, useEffect } from "react";
 
 
 function ProtectedRoute({ children }) {
+    // This component is a wrapper for routes that require authentication. 
+    // It checks if the user is authorized to access the route by checking the expiration of the access token. 
+    // If the token is expired, it attempts to refresh the token using the refresh token. 
+    // If the refresh token is invalid, the user is redirected to the login page.
+    
     const [isAuthorized, setIsAuthorized] = useState(null);
 
     useEffect(() => {

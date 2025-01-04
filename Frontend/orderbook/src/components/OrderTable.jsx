@@ -1,6 +1,7 @@
 import React from 'react';
 
 const OrderTable = ({ title, orders, bg_mode }) => {
+  // This component displays a table of orders with columns for price, quantity, user, and total. Used in the OrderBook component to display the buy and sell orders.
   return (
     <div className={`col card bg-${bg_mode} mx-3 pb-3`}>
       <h2>{title}</h2>
